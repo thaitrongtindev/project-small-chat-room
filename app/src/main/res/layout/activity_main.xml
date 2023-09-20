@@ -17,14 +17,38 @@
         android:elevation="5dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="0.842">
-        
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            
+
             <ImageButton
+                android:id="@+id/imageBtn_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:src="@drawable/ic_back"
+                android:background="@drawable/round_ripple">
+            </ImageButton>
+
+            <ImageView
+                android:id="@+id/image_chatRoom"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="110dp"
+                android:src="@drawable/chat"></ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@id/image_chatRoom"
+                android:fontFamily="serif"
+                android:text="Chat Room"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </RelativeLayout>
 
 
