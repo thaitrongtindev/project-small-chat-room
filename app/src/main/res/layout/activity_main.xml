@@ -60,6 +60,7 @@
         app:layout_constraintBottom_toTopOf="@id/relavtiveLayout"
         android:background="@drawable/background_main"
         android:padding="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"></androidx.recyclerview.widget.RecyclerView>
 
@@ -68,6 +69,38 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_marginBottom="20dp"
-        android:padding=""
-        app:layout_constraintBottom_toBottomOf="parent"></RelativeLayout>
+
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageButton
+            android:id="@+id/imgbtn_camera"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_camera"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/round_ripple"
+            android:layout_marginStart="10dp"></ImageButton>
+
+        <EditText
+            android:id="@+id/edit_input_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@color/fffbfe"
+            android:layout_toStartOf="@+id/imgbtn_send"
+            android:layout_toEndOf="@id/imgbtn_camera"
+            android:hint="@string/input_message" />
+
+        <ImageButton
+            android:id="@+id/imgbtn_send"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_send"
+            android:background="@drawable/round_ripple"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="5dp"></ImageButton>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

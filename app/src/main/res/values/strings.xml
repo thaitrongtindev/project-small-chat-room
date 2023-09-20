@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ChatRoomSmall</string>
     <string name="log_out">Log out</string>
+    <string name="input_message">Input message...</string>
 </resources>
