@@ -18,6 +18,7 @@
         app:layout_constraintHorizontal_bias="0.842"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -53,54 +54,71 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_content_chat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/relavtiveLayout"
-        android:background="@drawable/background_main"
-        android:padding="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/background_main"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/optCardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"></androidx.recyclerview.widget.RecyclerView>
 
-    <RelativeLayout
-        android:id="@+id/relavtiveLayout"
+    <com.github.captain_miao.optroundcardview.OptRoundCardView
+        android:id="@+id/optCardView"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="47dp"
         android:layout_marginBottom="20dp"
+        android:layout_margin="20dp"
 
+        android:elevation="10dp"
+        app:optRoundCardCornerRadius="20dp"
+        app:optRoundCardLeftTopCorner="true"
+        app:optRoundCardRightBottomCorner="true"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageButton
-            android:id="@+id/imgbtn_camera"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_camera"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/round_ripple"
-            android:layout_marginStart="10dp"></ImageButton>
-
-        <EditText
-            android:id="@+id/edit_input_message"
+        <RelativeLayout
+            android:id="@+id/relavtiveLayout"
             android:layout_width="match_parent"
+            android:layout_marginVertical="10dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@color/fffbfe"
-            android:layout_toStartOf="@+id/imgbtn_send"
-            android:layout_toEndOf="@id/imgbtn_camera"
-            android:hint="@string/input_message" />
+            android:layout_marginBottom="20dp">
 
-        <ImageButton
-            android:id="@+id/imgbtn_send"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_send"
-            android:background="@drawable/round_ripple"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="5dp"></ImageButton>
-    </RelativeLayout>
+            <ImageButton
+                android:id="@+id/imgbtn_camera"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/round_ripple"
+                android:src="@drawable/ic_camera"></ImageButton>
+
+            <EditText
+                android:id="@+id/edit_input_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toStartOf="@+id/imgbtn_send"
+                android:layout_toEndOf="@id/imgbtn_camera"
+                android:background="@color/fffbfe"
+                android:hint="@string/input_message" />
+
+            <ImageButton
+                android:id="@+id/imgbtn_send"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/round_ripple"
+                android:src="@drawable/ic_send"></ImageButton>
+        </RelativeLayout>
+    </com.github.captain_miao.optroundcardview.OptRoundCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
