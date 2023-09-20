@@ -15,8 +15,8 @@
         android:layout_marginTop="408dp"
         android:background="@drawable/toolbar_backgorund"
         android:elevation="5dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.842">
+        app:layout_constraintHorizontal_bias="0.842"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -26,17 +26,16 @@
                 android:id="@+id/imageBtn_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_back"
-                android:background="@drawable/round_ripple">
-            </ImageButton>
+                android:background="@drawable/round_ripple"
+                android:src="@drawable/ic_back"></ImageButton>
 
             <ImageView
                 android:id="@+id/image_chatRoom"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="110dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/chat"></ImageView>
 
             <TextView
@@ -54,4 +53,21 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_content_chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/relavtiveLayout"
+        android:background="@drawable/background_main"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"></androidx.recyclerview.widget.RecyclerView>
+
+    <RelativeLayout
+        android:id="@+id/relavtiveLayout"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginBottom="20dp"
+        android:padding=""
+        app:layout_constraintBottom_toBottomOf="parent"></RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
