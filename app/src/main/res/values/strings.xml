@@ -7,5 +7,11 @@
     <string name="please_enter_your_details">Please enter your details</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="forgot_password">Forgot password</string>
+    <string name="forgot_password"><u>Forgot password</u></string>
+    <string name="login">Login</string>
+    <string name="dont_t_have_an_account_sign_in_register">Dont\'t have an account? <u>Register</u></string>
+    <string name="login_in_with_facebook">Login in with Facebook</string>
+    <string name="login_in_with_google">Login in with Google</string>
+    <string name="forgot_password1">Forgot Password</string>
+    <string name="back">Back</string>
 </resources>
