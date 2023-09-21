@@ -2,4 +2,10 @@
     <string name="app_name">ChatRoomSmall</string>
     <string name="log_out">Log out</string>
     <string name="input_message">Input message...</string>
+    <string name="wellcome">WELLCOME</string>
+    <string name="wellcome1">Wellcome</string>
+    <string name="please_enter_your_details">Please enter your details</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot password</string>
 </resources>

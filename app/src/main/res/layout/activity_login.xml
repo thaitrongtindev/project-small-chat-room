@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.LoginActivity">
+
+    <ImageView
+        android:layout_gravity="center"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/backgound_logo"
+        android:src="@drawable/chat"></ImageView>
+
+    <LinearLayout
+
+        android:layout_marginTop="20dp"
+        android:padding="25dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/wellcome1"
+            android:textColor="@color/black"
+            android:textSize="40sp"
+            android:textStyle="bold"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="@string/please_enter_your_details"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/email"
+        android:textColor="@color/black"
+        android:textSize="23dp"></TextView>
+        
+        <EditText
+            android:id="@+id/edt_email"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="example@gmail.com"
+            android:paddingStart="10dp"
+            android:layout_marginTop="5dp"
+            android:textSize="17sp"
+            android:textStyle="italic"
+            android:layout_gravity="center"
+            android:background="@drawable/backgound_email_pass"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="35dp"></EditText>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="35dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/password"
+        android:textColor="@color/black"
+        android:textSize="23dp"></TextView>
+
+    <EditText
+        android:id="@+id/edt_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:inputType="textPassword"
+        android:paddingStart="10dp"
+        android:layout_marginTop="5dp"
+        android:textSize="17sp"
+        android:textStyle="italic"
+        android:layout_gravity="center"
+        android:background="@drawable/backgound_email_pass"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"></EditText>
+
+
+    <TextView
+        android:id="@+id/tv_forgot_password"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/forgot_password"
+        android:layout_marginStart="270dp"
+        android:textColor="@color/black"
+        android:textDecoration="underline" />
+
+
+
+</LinearLayout>
