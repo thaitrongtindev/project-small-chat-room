@@ -56,7 +56,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private void nextActivity() {
         mUser = mAuth.getCurrentUser();
-        if (mAuth == null) {
+        if (mUser == null) {
             startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
         } else {
             startActivity(new Intent(SplashScreenActivity.this, StartChatActivity.class));

@@ -6,10 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+
 import android.widget.Toast;
 
 import com.example.chatroomsmall.R;
@@ -17,7 +18,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterAccountActivity extends AppCompatActivity {
 
@@ -26,6 +26,7 @@ public class RegisterAccountActivity extends AppCompatActivity {
     private Button btnRegister;
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
+    private Boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,13 @@ public class RegisterAccountActivity extends AppCompatActivity {
     }
 
     private void addEvents() {
+        edtPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isPasswordVisible = !isPasswordVisible;
+                displayPasswordVisible();
+            }
+        });
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,6 +52,19 @@ public class RegisterAccountActivity extends AppCompatActivity {
                 onClickRegiter();
             }
         });
+    }
+
+    private void displayPasswordVisible() {
+        if (isPasswordVisible) {
+            edtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            edtPassword.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_visibility_off, 0);
+
+        } else {
+            edtPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            edtPassword.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_eye, 0);
+
+        }
+
     }
 
     private void onClickRegiter() {
@@ -59,6 +80,7 @@ public class RegisterAccountActivity extends AppCompatActivity {
                             startActivity(new Intent(RegisterAccountActivity.this, LoginActivity.class));
                             finishAffinity();
                         } else {
+                            progressDialog.dismiss();
                             Toast.makeText(RegisterAccountActivity.this, "Register error", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -66,7 +88,6 @@ public class RegisterAccountActivity extends AppCompatActivity {
     }
 
     private void addControls() {
-
         edtEmail = findViewById(R.id.edt_email_register);
         edtPassword = findViewById(R.id.edt_password_register);
         btnRegister = findViewById(R.id.btn_register);
