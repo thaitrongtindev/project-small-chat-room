@@ -20,11 +20,13 @@
 
     <com.github.captain_miao.optroundcardview.OptRoundCardView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="230dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
         app:optRoundCardBackgroundColor="#A4FFFFFF"
         app:optRoundCardCornerRadius="50dp"
+
         >
 
         <LinearLayout
@@ -37,7 +39,6 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:background="@drawable/background_ic_bell"
                 android:src="@drawable/baseline_attach_email_24"></ImageView>
 
             <TextView

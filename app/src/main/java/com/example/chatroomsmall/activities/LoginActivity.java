@@ -2,6 +2,7 @@ package com.example.chatroomsmall.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoginActivity.this, "TOAST", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(LoginActivity.this, StartChatActivity.class));
+                finish();
             }
         });
     }

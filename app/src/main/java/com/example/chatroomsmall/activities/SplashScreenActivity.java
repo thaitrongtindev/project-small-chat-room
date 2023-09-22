@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.chatroomsmall.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -19,6 +21,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     private Animation topAnim, bottomAnim;
     private ImageView imageView;
     private TextView logo, slogan;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +32,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
 
+
+        mAuth = FirebaseAuth.getInstance();
         topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
         bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
 
@@ -42,9 +49,17 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
-                finish();
+                nextActivity();
             }
         }, TIME_OUT);
+    }
+
+    private void nextActivity() {
+        mUser = mAuth.getCurrentUser();
+        if (mAuth == null) {
+            startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+        } else {
+            startActivity(new Intent(SplashScreenActivity.this, StartChatActivity.class));
+        }
     }
 }
