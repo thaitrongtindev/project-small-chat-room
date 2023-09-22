@@ -16,4 +16,5 @@
     <string name="back">Back</string>
     <string name="chat_room">CHAT ROOM</string>
     <string name="design_app_chat_by_trong_tin">Design app chat by Trong Tin</string>
+    <string name="start_sending_message_in_the_chat_room">Start Sending Message In The Chat Room</string>
 </resources>
