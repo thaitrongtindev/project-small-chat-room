@@ -51,6 +51,7 @@
                 android:textSize="22sp"></TextView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cv_enter"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
