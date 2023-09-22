@@ -21,9 +21,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button btnLogin;
+    private Button btnLogin, btnLoginGoogle, btnLoginFacebook;
     private EditText edtPassword, edtEmail;
-    private TextView tvRegister;
+    private TextView tvRegister, tcForgotPassword;
     private boolean isPasswordVisible = false;
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
@@ -73,6 +73,38 @@ public class LoginActivity extends AppCompatActivity {
                onClickLogin();
             }
         });
+
+        tcForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickForgotPassword();
+            }
+        });
+
+        btnLoginGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickLoginGoogle();
+            }
+        });
+        
+        btnLoginFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickLoginFacebook();
+            }
+        });
+    }
+
+    private void onClickLoginFacebook() {
+    }
+
+    private void onClickLoginGoogle() {
+    }
+
+    private void onClickForgotPassword() {
+        startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
+        finish();
     }
 
     private void onClickLogin() {
@@ -105,9 +137,13 @@ public class LoginActivity extends AppCompatActivity {
         edtEmail = findViewById(R.id.edt_email);
         edtPassword = findViewById(R.id.edt_password);
         tvRegister = findViewById(R.id.tv_register);
+        tcForgotPassword = findViewById(R.id.tv_forgot_password);
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(true);
         progressDialog.setMessage("wait....");
+
+        btnLoginFacebook = findViewById(R.id.btn_facebook);
+        btnLoginGoogle = findViewById(R.id.btn_google);
 
         mAuth = FirebaseAuth.getInstance();
     }
