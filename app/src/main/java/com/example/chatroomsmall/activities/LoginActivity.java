@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,12 @@ import android.widget.Toast;
 
 import com.example.chatroomsmall.MainActivity;
 import com.example.chatroomsmall.R;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,9 +36,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -47,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     // tuong tac voi service google sign in. bao roi viec dang nhap
 
 
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressDialog.show();
-               onClickLogin();
+                onClickLogin();
             }
         });
 
@@ -119,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                 onClickLoginGoogle();
             }
         });
-        
+
         btnLoginFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +140,65 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onClickLoginFacebook() {
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+
+//                        Log.e("TAG", loginResult.toString());
+//                        progressDialog.dismiss();
+//                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                        finish();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        Log.e("LOI FACBOOK", exception.toString());
+                    }
+                });
+
+
+    }
+
+    //facebook
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        //  Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            // Log.d(TAG, "signInWithCredential:success");
+                            progressDialog.dismiss();
+                            Toast.makeText(LoginActivity.this, "Facebook Login Success", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        } else {
+
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
     }
 
     private void onClickLoginGoogle() {
@@ -143,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data =result.getData();
+                        Intent data = result.getData();
                         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);// lấy data từ
                         //thông tin đăng nhập từ intent data
                         try {
@@ -195,26 +265,28 @@ public class LoginActivity extends AppCompatActivity {
         String strPassword = edtPassword.getText().toString().trim();
 
         mAuth.signInWithEmailAndPassword(strEmail, strPassword)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    progressDialog.dismiss();
-                                    // login susscess
-                                    startActivity(new Intent(LoginActivity.this, StartChatActivity.class));
-                                    finish();
-                                } else {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(LoginActivity.this, "Login error", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            progressDialog.dismiss();
+                            // login susscess
+                            startActivity(new Intent(LoginActivity.this, StartChatActivity.class));
+                            finish();
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(LoginActivity.this, "Login error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
     }
+
     private void onClickResgiter() {
         startActivity(new Intent(LoginActivity.this, RegisterAccountActivity.class));
         finish();
     }
+
     private void addControls() {
         btnLogin = findViewById(R.id.btn_login);
         edtEmail = findViewById(R.id.edt_email);
@@ -229,5 +301,11 @@ public class LoginActivity extends AppCompatActivity {
         btnLoginGoogle = findViewById(R.id.btn_google);
 
         mAuth = FirebaseAuth.getInstance();
+        callbackManager = CallbackManager.Factory.create();
+
+        //  LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));       //facebook
+
     }
+
+
 }
