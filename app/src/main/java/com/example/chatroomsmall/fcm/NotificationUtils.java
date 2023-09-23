@@ -49,17 +49,13 @@ public class NotificationUtils {
                 .setContentTitle(title)
                 .setContentIntent(pendingIntent)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_notification)
                 //.setSound(Uri.parse(String.valueOf(NotificationCompat.DEFAULT_SOUND)))
                  .setSound(defaultSoundUri)
 
                 .build();
 
-        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.bigText(title);
-        bigTextStyle.setBigContentTitle(title);
-        bigTextStyle.setSummaryText(title);
-        builder.setStyle(bigTextStyle);
+
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
