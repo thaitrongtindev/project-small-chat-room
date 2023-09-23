@@ -46,8 +46,18 @@ dependencies {
     // authen
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.gms:play-services-auth:20.6.0")
+    //fcm
+    implementation("com.google.firebase:firebase-messaging")
+
+
+
     //login facebook
     implementation 'com.facebook.android:facebook-login:latest.release'
+
+
+
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
 
 
 
