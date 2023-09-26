@@ -48,13 +48,17 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.6.0")
     //fcm
     implementation("com.google.firebase:firebase-messaging")
+    // firestore
+    implementation("com.google.firebase:firebase-firestore")
+    // firebase storage
+    implementation("com.google.firebase:firebase-storage")
+    // firebase UI firestore
+    implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
 
 
 
     //login facebook
     implementation 'com.facebook.android:facebook-login:latest.release'
-
-
 
     // glide
     implementation 'com.github.bumptech.glide:glide:4.16.0'

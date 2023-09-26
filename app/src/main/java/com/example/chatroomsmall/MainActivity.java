@@ -18,14 +18,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private Toolbar toolbar;
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
+        // firebase firestore
+        db = FirebaseFirestore.getInstance();
+
+        /// tạo tham chiếu đến collection trong firestore
+        CollectionReference collectionReference = db.collection("CHAT");
+        Query query = collectionReference.orderBy("timestamp", Query.Direction.DESCENDING);
+
 
     }
 
