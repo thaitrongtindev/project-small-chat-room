@@ -7,11 +7,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,6 +55,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CAMERA_PERMISSION_CODE = 1;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private Toolbar toolbar;
@@ -87,6 +92,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION_CODE);
+            return;
+        }
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         activityResultLauncher.launch(cameraIntent);
 
@@ -98,13 +109,23 @@ public class MainActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     // nhận dữ liệu
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        startActivity(new Intent(MainActivity.this, ImageUpLoadPrevious.class).putExtra("image_uri", data));
+                        Bundle extras = result.getData().getExtras();
+                        if (extras != null) {
+                            Bitmap imageBitmap = (Bitmap) extras.get("data");
 
+                            // Chuyển ảnh sang activity mới
+                            if (imageBitmap != null) {
+                                Intent intent = new Intent(MainActivity.this, ImageUpLoadPrevious.class);
+                                intent.putExtra("image_bitmap", imageBitmap);
+                                startActivity(intent);
+                            }
+                        }
                     }
+
                 }
             }
     );
+
     private void onClickSendMessage() {
         String strMessage = edtMessage.getText().toString().trim();
         if (TextUtils.isEmpty(strMessage) == false) {
@@ -115,21 +136,21 @@ public class MainActivity extends AppCompatActivity {
             // get image account
             String user_image_url = "";
             Uri photoUri = mUser.getPhotoUrl();
-            Log.e("PhotoUri", photoUri.toString() );
+            Log.e("PhotoUri", photoUri.toString());
 
             if (photoUri != null) {
                 user_image_url = photoUri.toString();
-              //   Toast.makeText(this, user_image_url.toString(), Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(this, user_image_url.toString(), Toast.LENGTH_SHORT).show();
 
                 Log.e("URL IAMGE", user_image_url.toString());
             }
 
             HashMap<String, String> messageObj = new HashMap<>();
             messageObj.put("message", strMessage);
-            messageObj.put("user_name",mUser.getDisplayName());
+            messageObj.put("user_name", mUser.getDisplayName());
             messageObj.put("timestamp", FieldValue.serverTimestamp().toString());
             messageObj.put("messageId", messageId);
-            messageObj.put("user_image_url",user_image_url);
+            messageObj.put("user_image_url", user_image_url);
 
 
             collectionReference.document(messageId).set(messageObj)
