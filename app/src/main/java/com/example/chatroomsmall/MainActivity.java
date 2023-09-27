@@ -1,14 +1,21 @@
 package com.example.chatroomsmall;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chatroomsmall.activities.ImageUpLoadPrevious;
 import com.example.chatroomsmall.activities.LoginActivity;
 import com.example.chatroomsmall.adapter.ChatAdapter;
 import com.example.chatroomsmall.model.ChatModel;
@@ -79,8 +87,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        activityResultLauncher.launch(cameraIntent);
+
     }
 
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    // nhận dữ liệu
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        startActivity(new Intent(MainActivity.this, ImageUpLoadPrevious.class).putExtra("image_uri", data));
+
+                    }
+                }
+            }
+    );
     private void onClickSendMessage() {
         String strMessage = edtMessage.getText().toString().trim();
         if (TextUtils.isEmpty(strMessage) == false) {
