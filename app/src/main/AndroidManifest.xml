@@ -30,10 +30,10 @@
             android:name=".activities.ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.SplashScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -70,6 +70,9 @@
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

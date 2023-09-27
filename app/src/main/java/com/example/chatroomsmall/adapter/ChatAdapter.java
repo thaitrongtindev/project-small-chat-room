@@ -38,9 +38,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, ChatAdapter
         if (model.getChat_image() != null) {
             Glide.with(holder.chatImageView).load(model.getChat_image())
                     .into(holder.chatImageView);
-            holder.imageView.setVisibility(View.VISIBLE);
-        } else
+            holder.chatImageView.setVisibility(View.VISIBLE);
+        } else {
             holder.chatImageView.setVisibility(View.GONE);
+        }
     }
 
     @NonNull
@@ -60,7 +61,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, ChatAdapter
             super(itemView);
             tvMessage = itemView.findViewById(R.id.tv_content_message);
             imageView = itemView.findViewById(R.id.img_user);
-            chatImageView = itemView.findViewById(R.id.image_chatRoom);
+            chatImageView = itemView.findViewById(R.id.image_cam);
         }
     }
 }

@@ -22,6 +22,7 @@
     <string name="facebook_app_id">170484502761081</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
     <string name="facebook_client_token">df38652cb3df4415b86fce87142a3c62</string>
+    <string name="this_is_content_messgage_chat">This is content messgage chat</string>
 
 
 </resources>
