@@ -99,7 +99,7 @@
                 android:src="@drawable/ic_camera"></ImageButton>
 
             <EditText
-                android:id="@+id/edit_input_message"
+                android:id="@+id/edt_input_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

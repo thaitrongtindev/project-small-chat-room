@@ -7,12 +7,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chatroomsmall.activities.LoginActivity;
@@ -26,9 +30,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.net.URI;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     private RecyclerView recyclerView;
     private ImageButton imageBtnCamera, imageBtnSend;
+    private EditText edtMessage;
+    private CollectionReference collectionReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +61,64 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<String> task) {
                 String token = task.getResult();
-                Log.e("TOKEN", token.toString() );
+                Log.e("TOKEN", token.toString());
             }
-        }) ;
+        });
         addControls();
         addEvents();
     }
 
     private void addEvents() {
+        imageBtnSend.setOnClickListener(view -> {
+            onClickSendMessage();
+        });
+
+        imageBtnCamera.setOnClickListener(view -> {
+            onClickCamera();
+        });
+    }
+
+    private void onClickCamera() {
+    }
+
+    private void onClickSendMessage() {
+        String strMessage = edtMessage.getText().toString().trim();
+        if (TextUtils.isEmpty(strMessage) == false) {
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+            String messageId = format.format(date);
+
+            // get image account
+            String user_image_url = "";
+            Uri photoUri = mUser.getPhotoUrl();
+            Log.e("PhotoUri", photoUri.toString() );
+
+            if (photoUri != null) {
+                user_image_url = photoUri.toString();
+              //   Toast.makeText(this, user_image_url.toString(), Toast.LENGTH_SHORT).show();
+
+                Log.e("URL IAMGE", user_image_url.toString());
+            }
+
+            HashMap<String, String> messageObj = new HashMap<>();
+            messageObj.put("message", strMessage);
+            messageObj.put("user_name",mUser.getDisplayName());
+            messageObj.put("timestamp", FieldValue.serverTimestamp().toString());
+            messageObj.put("messageId", messageId);
+            messageObj.put("user_image_url",user_image_url);
+
+
+            collectionReference.document(messageId).set(messageObj)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(MainActivity.this, "Send Mesgage", Toast.LENGTH_SHORT).show();
+                                edtMessage.setText("");
+                            }
+                        }
+                    });
+        }
     }
 
     private void addControls() {
@@ -63,13 +127,15 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rcv_content_chat);
         imageBtnCamera = findViewById(R.id.imgbtn_camera);
         imageBtnSend = findViewById(R.id.imgbtn_send);
+        edtMessage = findViewById(R.id.edt_input_message);
 
         mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         // firebase firestore
         db = FirebaseFirestore.getInstance();
 
         /// tạo tham chiếu đến collection trong firestore
-        CollectionReference collectionReference = db.collection("CHAT");
+        collectionReference = db.collection("CHAT");
         Query query = collectionReference.orderBy("timestamp", Query.Direction.DESCENDING);
         // khỏi tạo Firestore Recyclerview
 
@@ -77,13 +143,11 @@ public class MainActivity extends AppCompatActivity {
                 .setQuery(query, ChatModel.class).build();
         // chuyển đôi dữ liệu trên firestore thành đối tượng ChatModel
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
         // initial adapter
         chatAdapter = new ChatAdapter(options);
         recyclerView.setAdapter(chatAdapter);
-        chatAdapter.notifyDataSetChanged();
-
-
+        chatAdapter.startListening();
 
 
     }
