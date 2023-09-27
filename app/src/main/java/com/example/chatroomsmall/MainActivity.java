@@ -9,11 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -27,7 +29,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chatroomsmall.activities.ImageUpLoadPrevious;
@@ -35,7 +36,6 @@ import com.example.chatroomsmall.activities.LoginActivity;
 import com.example.chatroomsmall.adapter.ChatAdapter;
 import com.example.chatroomsmall.model.ChatModel;
 import com.facebook.login.LoginManager;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,8 +47,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.net.URI;
-import java.net.URL;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,6 +58,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CAMERA_PERMISSION_CODE = 1;
+    private Context context;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private Toolbar toolbar;
@@ -112,19 +115,76 @@ public class MainActivity extends AppCompatActivity {
                         Bundle extras = result.getData().getExtras();
                         if (extras != null) {
                             Bitmap imageBitmap = (Bitmap) extras.get("data");
+                            Uri imageUri;
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                            String path = MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver()
+                            , imageBitmap, "val", null);
+                            imageUri = Uri.parse(path);
 
+//                            WeakReference<Bitmap> result1 = new WeakReference<>(Bitmap.createScaledBitmap(imageBitmap,
+//                                    imageBitmap.getHeight(), imageBitmap.getWidth(), false).copy(Bitmap.Config.RGB_565, true)
+//
+//                            );
+//                            Bitmap bm = result1.get();
+//                            iamgeUri = saveImage3(bm,getApplicationContext());
+//
                             // Chuyển ảnh sang activity mới
-                            if (imageBitmap != null) {
+                            Log.e("imageUri",  imageUri.toString() );
                                 Intent intent = new Intent(MainActivity.this, ImageUpLoadPrevious.class);
-                                intent.putExtra("image_bitmap", imageBitmap);
-                                startActivity(intent);
-                            }
+                                intent.putExtra("image_bitmap", imageUri);
+                               startActivity(intent);
+//                            }
                         }
                     }
 
                 }
             }
     );
+
+//    private Uri saveImage3(Bitmap bm, Context context) {
+//        File imagesFolder = new File(context.getCacheDir(), "images");
+//        Uri uri = null;
+//        try {
+//            imagesFolder.mkdir();
+//            File file = new File(imagesFolder, "captured_image.jpg");
+//            FileOutputStream fileOutputStream = new FileOutputStream(file);
+//            bm.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+//            fileOutputStream.flush();
+//            fileOutputStream.close();
+//            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.example.chatroomsmall"
+//                    +".provider", file);
+//            Log.e("URI", uri.toString());
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return uri;
+//    }
+//
+//
+//
+//    private Uri saveImage(Bitmap bm, MainActivity mainActivity) {
+//        File imagesFolder = new File(mainActivity.getCacheDir(), "images");
+//        Uri uri = null;
+//        try {
+//            imagesFolder.mkdir();
+//            File file = new File(imagesFolder, "captured_image.jpg");
+//            FileOutputStream fileOutputStream = new FileOutputStream(file);
+//            bm.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+//            fileOutputStream.flush();
+//            fileOutputStream.close();
+//            uri = FileProvider.getUriForFile(getApplicationContext(), "com.example.chatroomsmall"
+//            +".provider", file);
+//            Log.e("URI", uri.toString());
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return uri;
+//    }
 
     private void onClickSendMessage() {
         String strMessage = edtMessage.getText().toString().trim();
