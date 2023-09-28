@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -21,11 +22,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.chatroomsmall.MainActivity;
 import com.example.chatroomsmall.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -46,7 +52,10 @@ public class ImageUpLoadPrevious extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private EditText edtMessage;
     private Uri imageUri;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private ProgressDialog progressDialog;
+    private CollectionReference collectionReference;
 
 
     @Override
@@ -67,6 +76,8 @@ public class ImageUpLoadPrevious extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Upload.....");
 
+        mAuth = FirebaseAuth.getInstance();
+
         Bundle bundle = getIntent().getExtras();
         // String image = bundle.getString("image_bitmap");
 
@@ -78,10 +89,18 @@ public class ImageUpLoadPrevious extends AppCompatActivity {
         imageUpload.setImageURI(imageUri);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseFirestore.collection("CHAT");
+        collectionReference = firebaseFirestore.collection("CHAT");
+
     }
 
     private void addEvents() {
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ImageUpLoadPrevious.this, MainActivity.class));
+                finish();
+            }
+        });
         imBtnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,6 +154,7 @@ public class ImageUpLoadPrevious extends AppCompatActivity {
                     imagePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+                            Log.e("URI_IMAGE_SUCCEESS", uri.toString() );
                             addMessageToFirebaseStore(uri, messageId);
                         }
                     });
@@ -146,15 +166,47 @@ public class ImageUpLoadPrevious extends AppCompatActivity {
 
     private void addMessageToFirebaseStore(Uri uri, String messageId) {
 
+        mUser = mAuth.getCurrentUser();
+        Log.e("URI ADD MESSAGE", uri.toString());
+        String message = edtMessage.getText().toString();
+
+//        if (!TextUtils.isEmpty(message)) {
+//            message ="\uD83D\uDCF7";
+//            /*
+//            Nếu trống, bạn gán cho biến message một emoji hình máy ảnh để biểu thị
+//             rằng tin nhắn là một hình ảnh. Emoji này sẽ được hiển thị thay cho văn bản trống.
+//             */
+//        }
+
+        if (TextUtils.isEmpty(message)) {
+            message ="\uD83D\uDCF7";
+            /*
+            Nếu trống, bạn gán cho biến message một emoji hình máy ảnh để biểu thị
+             rằng tin nhắn là một hình ảnh. Emoji này sẽ được hiển thị thay cho văn bản trống.
+             */
+        }
+
+        // getting usser image form google account
+        String user_image_url = "";
+        Uri photoUri = mUser.getPhotoUrl();
+        //         Log.e("TAG", "addSendMess: " + photoUri.toString());
+        String originalUrl = "s96-c/photo.jpg";
+        String resizeImageUrl = "s400-c/photo/jpg";
+        if (photoUri != null) {
+            String photoPath = photoUri.toString();
+            user_image_url = photoPath.replace(originalUrl, resizeImageUrl);
+            // Log.e("URL IAMGE", "addSendMess: " + user_image_url.toString());
+        }
+
         HashMap<String, Object> messageObj = new HashMap<>();
-      //  messageObj.put("message", message);
-      //  messageObj.put("user_name", mUser.getDisplayName());
-        //  messageObj.put("timestamp",  new Date().getTime());
+        messageObj.put("message", message);
+        messageObj.put("user_name", mUser.getDisplayName());
+        messageObj.put("timestamp", FieldValue.serverTimestamp().toString());
         messageObj.put("messageId", messageId);
         messageObj.put("chat_image", uri.toString());
-        //messageObj.put("user_image_url", user_image_url);
+        messageObj.put("user_image_url", user_image_url);
 
-        firebaseFirestore.document(messageId).set(messageObj).addOnCompleteListener(new OnCompleteListener<Void>() {
+        collectionReference.document(messageId).set(messageObj).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {

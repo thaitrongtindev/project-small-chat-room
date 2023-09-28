@@ -219,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(MainActivity.this, "Send Mesgage", Toast.LENGTH_SHORT).show();
+
                                 edtMessage.setText("");
                             }
                         }
@@ -246,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirestoreRecyclerOptions<ChatModel> options = new FirestoreRecyclerOptions.Builder<ChatModel>()
                 .setQuery(query, ChatModel.class).build();
+        Log.e("CHATMODEL", ChatModel.class.toString());
         // chuyển đôi dữ liệu trên firestore thành đối tượng ChatModel
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));

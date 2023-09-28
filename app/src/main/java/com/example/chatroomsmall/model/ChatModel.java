@@ -58,4 +58,15 @@ public class ChatModel {
     public void setChat_image(String chat_image) {
         this.chat_image = chat_image;
     }
+
+    @Override
+    public String toString() {
+        return "ChatModel{" +
+                "message='" + message + '\'' +
+                ", user_name='" + user_name + '\'' +
+                ", messageId='" + messageId + '\'' +
+                ", user_image_url='" + user_image_url + '\'' +
+                ", chat_image='" + chat_image + '\'' +
+                '}';
+    }
 }
